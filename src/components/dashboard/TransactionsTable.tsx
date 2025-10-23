@@ -17,10 +17,15 @@ export default function TransactionsTable() {
 
   return (
     <div className="bg-white p-4 rounded-2xl shadow">
-      <div className="flex items-center justify-between mb-4">
+      <div className="md:flex items-center justify-between mb-4 grid grid-cols-1">
         <h3 className="text-lg font-semibold">Recent Transactions</h3>
         <div className="flex items-center gap-2">
-          <input placeholder="Search" value={search} onChange={e => setSearch(e.target.value)} className="border rounded px-2 py-1 text-sm" />
+          <input
+            placeholder="Search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="border rounded px-2 py-1 text-sm"
+          />
           <Button variant="ghost">Export</Button>
         </div>
       </div>
@@ -37,14 +42,18 @@ export default function TransactionsTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {transactions.map(tx => (
+          {transactions.map((tx) => (
             <TableRow key={tx.id}>
               <TableCell>{tx.id}</TableCell>
               <TableCell>{tx.type}</TableCell>
               <TableCell>${tx.amount.toLocaleString()}</TableCell>
               <TableCell>{tx.status}</TableCell>
               <TableCell>{tx.date}</TableCell>
-              <TableCell><Button variant="ghost" size="sm">View</Button></TableCell>
+              <TableCell>
+                <Button variant="ghost" size="sm">
+                  View
+                </Button>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

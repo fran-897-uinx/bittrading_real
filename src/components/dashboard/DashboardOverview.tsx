@@ -10,6 +10,7 @@ const kpi = [
   { title: "Investments", value: "243,175", diff: "+1.1%" },
   { title: "Deposits", value: "$6,715,101", diff: "+2.5%" },
   { title: "Withdrawals", value: "$754,169,518", diff: "-0.2%" },
+  { title: "Referral", value: "$754", diff: "-0.2%" },
 ];
 
 const chartData = [
