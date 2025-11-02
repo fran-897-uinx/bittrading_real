@@ -9,7 +9,6 @@ import {
   Banknote,
   ArrowUpCircle,
   ArrowDownCircle,
-  ListChecks,
   User,
   Settings,
   LifeBuoy,
@@ -18,14 +17,20 @@ import {
   X,
   ChevronDown,
   ChevronRight,
+  ActivitySquare,
+  GaugeIcon,
+  LucideLogs,
+  UsersRound,
 } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-
+import { League_Gothic } from "next/font/google";
+import { useAuth } from "@/app/private/layout";
 export default function Sidebar() {
   const pathname = usePathname() || "/";
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const { user, loading } = useAuth();
 
   // Dropdown states
   const [openDeposit, setOpenDeposit] = useState(false);
@@ -40,10 +45,17 @@ export default function Sidebar() {
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(href + "/");
 
+  // 💡 This will close the sidebar only on mobile
+  const handleLinkClick = () => {
+    if (window.innerWidth < 768) {
+      setOpen(false);
+    }
+  };
+
   return (
     <>
       {/* Mobile toggle */}
-      <div className="md:hidden fixed top-4 left-4 z-50">
+      <div className=" md:block lg:hidden fixed top-4 left-4 z-50">
         <button
           aria-label="Toggle menu"
           onClick={() => setOpen((v) => !v)}
@@ -61,8 +73,8 @@ export default function Sidebar() {
       <aside
         className={`fixed top-0 left-0 h-full z-40 transform transition-transform duration-300
          ${
-           open ? "translate-x-0" : "-translate-x-full"
-         } md:translate-x-0 md:static md:w-72 w-64`}
+           open ? "translate-x-0" : "-translate-x-full sm:-translate-x-full"
+         } lg:translate-x-0 lg:static lg:w-72 w-80 sm:80`}
         aria-label="Sidebar"
       >
         <div className="h-full flex flex-col bg-white/95 dark:bg-slate-900 border-r shadow-sm">
@@ -70,15 +82,15 @@ export default function Sidebar() {
           <div className="px-5 py-6 flex items-center gap-3 border-b">
             <Avatar className="w-10 h-10">
               <div className="w-10 h-10 rounded-full bg-blue-700 text-white flex items-center justify-center">
-                B
+                {user?.username?.[0] || "U"}
               </div>
             </Avatar>
             <div>
               <div className="text-slate-900 dark:text-white font-semibold">
-                BitTrading
+                {user?.username}
               </div>
               <div className="text-xs text-slate-500 dark:text-slate-400">
-                Pro Account
+                {user?.email}
               </div>
             </div>
           </div>
@@ -90,6 +102,7 @@ export default function Sidebar() {
               <li>
                 <Link
                   href="/private/dashboard"
+                  onClick={handleLinkClick}
                   className={`group flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition ${
                     isActive("/private/dashboard")
                       ? "bg-blue-600 text-white shadow"
@@ -122,6 +135,7 @@ export default function Sidebar() {
                     <li>
                       <Link
                         href="/private/investments"
+                        onClick={handleLinkClick}
                         className={`block px-2 py-1 text-sm rounded-md ${
                           isActive("/private/investments")
                             ? "bg-blue-100 text-blue-700"
@@ -133,7 +147,8 @@ export default function Sidebar() {
                     </li>
                     <li>
                       <Link
-                        href="/private/investment-log"
+                        href="/private/investments-log"
+                        onClick={handleLinkClick}
                         className={`block px-2 py-1 text-sm rounded-md ${
                           isActive("/private/investment-log")
                             ? "bg-blue-100 text-blue-700"
@@ -168,6 +183,7 @@ export default function Sidebar() {
                     <li>
                       <Link
                         href="/private/deposit"
+                        onClick={handleLinkClick}
                         className={`block px-2 py-1 text-sm rounded-md ${
                           isActive("/private/deposit")
                             ? "bg-blue-100 text-blue-700"
@@ -180,6 +196,7 @@ export default function Sidebar() {
                     <li>
                       <Link
                         href="/private/deposit-log"
+                        onClick={handleLinkClick}
                         className={`block px-2 py-1 text-sm rounded-md ${
                           isActive("/private/deposit-log")
                             ? "bg-blue-100 text-blue-700"
@@ -214,6 +231,7 @@ export default function Sidebar() {
                     <li>
                       <Link
                         href="/private/withdraw"
+                        onClick={handleLinkClick}
                         className={`block px-2 py-1 text-sm rounded-md ${
                           isActive("/private/withdraw")
                             ? "bg-blue-100 text-blue-700"
@@ -226,6 +244,7 @@ export default function Sidebar() {
                     <li>
                       <Link
                         href="/private/withdraw-log"
+                        onClick={handleLinkClick}
                         className={`block px-2 py-1 text-sm rounded-md ${
                           isActive("/private/withdraw-log")
                             ? "bg-blue-100 text-blue-700"
@@ -260,6 +279,7 @@ export default function Sidebar() {
                     <li>
                       <Link
                         href="/private/transfer"
+                        onClick={handleLinkClick}
                         className={`block px-2 py-1 text-sm rounded-md ${
                           isActive("/private/transfer")
                             ? "bg-blue-100 text-blue-700"
@@ -272,6 +292,7 @@ export default function Sidebar() {
                     <li>
                       <Link
                         href="/private/transfer-log"
+                        onClick={handleLinkClick}
                         className={`block px-2 py-1 text-sm rounded-md ${
                           isActive("/private/transfer-log")
                             ? "bg-blue-100 text-blue-700"
@@ -284,9 +305,28 @@ export default function Sidebar() {
                   </ul>
                 )}
               </li>
+              <li>
+                <Link
+                  href="/private/transaction"
+                  onClick={handleLinkClick}
+                  className="flex items-center gap-3 px-3 py-2 rounded-md text-sm text-slate-700 hover:bg-slate-100"
+                >
+                  <LucideLogs className="w-5 h-5 text-slate-500" />
+                  Transaction Log
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/private/activeinvests"
+                  onClick={handleLinkClick}
+                  className="flex items-center gap-3 px-3 py-2 rounded-md text-sm text-slate-700 hover:bg-slate-100"
+                >
+                  <GaugeIcon className="w-5 h-5 text-slate-500" />
+                  Interest Log
+                </Link>
+              </li>
             </ul>
 
-            {/* Divider */}
             <div className="my-5 border-t" />
 
             {/* Static Links */}
@@ -294,28 +334,41 @@ export default function Sidebar() {
               <li>
                 <Link
                   href="/private/profile"
+                  onClick={handleLinkClick}
                   className="flex items-center gap-3 px-3 py-2 rounded-md text-sm text-slate-700 hover:bg-slate-100"
                 >
                   <User className="w-5 h-5 text-slate-500" />
-                  Profile
+                  2FA Authentication
                 </Link>
               </li>
               <li>
                 <Link
                   href="/private/settings"
+                  onClick={handleLinkClick}
                   className="flex items-center gap-3 px-3 py-2 rounded-md text-sm text-slate-700 hover:bg-slate-100"
                 >
-                  <Settings className="w-5 h-5 text-slate-500" />
-                  Settings
+                  <UsersRound className="w-5 h-5 text-slate-500" />
+                  Referral Log
                 </Link>
               </li>
               <li>
                 <Link
                   href="/dashboard/support"
+                  onClick={handleLinkClick}
                   className="flex items-center gap-3 px-3 py-2 rounded-md text-sm text-slate-700 hover:bg-slate-100"
                 >
                   <LifeBuoy className="w-5 h-5 text-slate-500" />
                   Support
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/private/activeinvests"
+                  onClick={handleLinkClick}
+                  className="flex items-center gap-3 px-3 py-2 rounded-md text-sm text-slate-700 hover:bg-slate-100"
+                >
+                  <ActivitySquare className="w-5 h-5 text-slate-500" />
+                  ActiveInvestment
                 </Link>
               </li>
             </ul>
@@ -326,15 +379,15 @@ export default function Sidebar() {
             <div className="flex items-center justify-between gap-3">
               <div>
                 <div className="text-sm font-medium text-slate-700">
-                  Hello, User
+                  Hello, {user?.username}
                 </div>
-                <div className="text-xs text-slate-500">user@example.com</div>
+                <div className="text-xs text-slate-500">{user?.email}</div>
               </div>
 
               <Button
                 variant="ghost"
                 onClick={handleLogout}
-                className="flex items-center gap-2 text-slate-700 hover:bg-slate-100"
+                className="flex items-center gap-2 text-slate-700 hover:bg-slate-100 cursor-pointer"
               >
                 <LogOut className="w-4 h-4" />
                 <span className="hidden md:inline">Logout</span>

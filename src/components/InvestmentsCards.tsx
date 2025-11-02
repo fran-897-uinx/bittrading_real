@@ -27,7 +27,7 @@ export function InvestmentCard({ plan, index }: InvestmentCardProps) {
       transition={{ delay: index * 0.1, duration: 0.5 }}
       viewport={{ once: true }}
     >
-      <div className="flex justify-center">
+      <div className="flex justify-center ">
         <div className="relative bg-white border border-slate-200 shadow-md rounded-2xl overflow-hidden hover:shadow-xl transition-all w-full max-w-sm">
           {/* Header badge */}
           <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-sm font-semibold px-6 py-2 rounded-full shadow text-center">

@@ -17,10 +17,26 @@ export default function Navbar() {
 
         {/* Desktop Menu */}
         <ul className="hidden md:flex space-x-6 text-gray-700">
-          <li><Link href="/" className="hover:text-blue-600">Home</Link></li>
-          <li><Link href="#faq" className="hover:text-blue-600">FAQ</Link></li>
-          <li><Link href="#plans" className="hover:text-blue-600">Privacy Policy</Link></li>
-          <li><Link href="#contact" className="hover:text-blue-600">Contact</Link></li>
+          <li>
+            <Link href="/" className="hover:text-blue-600">
+              Home
+            </Link>
+          </li>
+          <li>
+            <Link href="#faq" className="hover:text-blue-600">
+              FAQ
+            </Link>
+          </li>
+          <li>
+            <Link href="#plans" className="hover:text-blue-600">
+              Privacy Policy
+            </Link>
+          </li>
+          <li>
+            <Link href="#contact" className="hover:text-blue-600">
+              Contact
+            </Link>
+          </li>
         </ul>
 
         {/* Desktop Buttons */}
@@ -52,13 +68,41 @@ export default function Navbar() {
       {isOpen && (
         <div className="md:hidden bg-white shadow-md border-t border-gray-200">
           <ul className="flex flex-col items-center py-4 space-y-3 text-gray-700">
-            <li><Link href="/" onClick={toggleMenu}>Home</Link></li>
-            <li><Link href="#faq" onClick={toggleMenu}>FAQ</Link></li>
-            <li><Link href="#plans" onClick={toggleMenu}>Plans</Link></li>
-            <li><Link href="#contact" onClick={toggleMenu}>Contact</Link></li>
+            <li>
+              <Link href="/" onClick={toggleMenu}>
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link href="#faq" onClick={toggleMenu}>
+                FAQ
+              </Link>
+            </li>
+            <li>
+              <Link href="#plans" onClick={toggleMenu}>
+                Privacy Policy
+              </Link>
+            </li>
+            <li>
+              <Link href="#contact" onClick={toggleMenu}>
+                Contact
+              </Link>
+            </li>
             <li className="pt-2 border-t w-4/5 text-center">
-              <Link href="/login/" className="block py-2 text-blue-600" onClick={toggleMenu}>Login</Link>
-              <Link href="/signup/" className="block py-2 text-blue-600" onClick={toggleMenu}>Register</Link>
+              <Link
+                href="/login/"
+                className="block py-2 text-blue-600"
+                onClick={toggleMenu}
+              >
+                Login
+              </Link>
+              <Link
+                href="/signup/"
+                className="block py-2 text-blue-600"
+                onClick={toggleMenu}
+              >
+                Register
+              </Link>
             </li>
           </ul>
         </div>

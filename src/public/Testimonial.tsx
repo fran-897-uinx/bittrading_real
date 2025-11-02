@@ -7,8 +7,6 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
   type CarouselApi,
 } from "@/components/ui/carousel";
 
@@ -197,20 +195,21 @@ export default function Testimonials() {
               <CarouselItem key={i}>
                 <AnimatePresence mode="wait">
                   {current === i && (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                      animate={{ opacity: 1, scale: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.95, y: -20 }}
-                      transition={{ duration: 0.6 }}
-                      className="bg-blue-800/40 backdrop-blur-sm border border-white/10 p-8 md:p-12 rounded-2xl shadow-lg max-w-3xl mx-auto"
-                    >
+                    // <motion.div
+                    //   key={i}
+                    //   initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                    //   animate={{ opacity: 1, scale: 1, y: 0 }}
+                    //   exit={{ opacity: 0, scale: 0.95, y: -20 }}
+                    //   transition={{ duration: 0.6 }}
+                    // >
+                    <div className="bg-blue-800/40 backdrop-blur-sm border border-white/10 p-8 md:p-12 rounded-2xl shadow-lg max-w-3xl mx-auto">
                       <p className="italic text-lg md:text-xl mb-6">
                         “{t.comment}”
                       </p>
                       <h4 className="font-semibold text-xl">{t.name}</h4>
                       <span className="text-sm text-gray-300">{t.role}</span>
-                    </motion.div>
+                    </div>
+                    // </motion.div>
                   )}
                 </AnimatePresence>
               </CarouselItem>

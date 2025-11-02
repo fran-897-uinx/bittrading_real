@@ -17,43 +17,50 @@ interface Transaction {
   created_at: string;
 }
 
-export default function TransactionsTable() {
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+export default function DepositsTable() {
+  const [deposits, setDeposits] = useState<Transaction[]>([]);
   const token =
     typeof window !== "undefined" ? localStorage.getItem("access_token") : null;
 
   useEffect(() => {
-    const fetchTransactions = async () => {
+    const fetchDeposits = async () => {
       try {
         const res = await fetch("http://127.0.0.1:8000/api/transactions/", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
         if (!res.ok) {
-          console.error("Failed to fetch transactions:", res.statusText);
+          console.error("Failed to fetch deposits:", res.statusText);
           return;
         }
 
         const data = await res.json();
 
-        // 🔹 Sort newest first and show only 7 initially
-        const sorted = data.sort(
-          (a: Transaction, b: Transaction) =>
-            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        );
-        setTransactions(sorted);
+        // 🔹 Filter only deposit transactions
+        const filtered = data
+          .filter(
+            (tx: Transaction) =>
+              tx.transaction_type &&
+              tx.transaction_type.toUpperCase() === "DEPOSIT"
+          )
+          .sort(
+            (a: Transaction, b: Transaction) =>
+              new Date(b.created_at).getTime() -
+              new Date(a.created_at).getTime()
+          );
+
+        setDeposits(filtered);
       } catch (error) {
-        console.error("Error fetching transactions:", error);
+        console.error("Error fetching deposits:", error);
       }
     };
 
-    if (token) fetchTransactions();
+    if (token) fetchDeposits();
   }, [token]);
 
-  // 🔹 Show only the latest 7 transactions
-  const visibleTransactions = transactions.slice(0, 7);
+  // 🔹 Limit to 7 per view
+  const visibleDeposits = deposits.slice(0, 7);
 
-  // 🔹 Status badge style
   const getStatusColor = (status: string) => {
     switch (status.toUpperCase()) {
       case "APPROVED":
@@ -70,15 +77,14 @@ export default function TransactionsTable() {
 
   return (
     <div className="bg-white p-6 rounded-2xl shadow-md">
-      <h3 className="text-xl font-semibold mb-4 text-indigo-600">
-        Recent Transactions
+      <h3 className="text-xl font-semibold mb-4 text-green-600">
+        Deposit History
       </h3>
 
-      <div className="max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-indigo-400 scrollbar-track-gray-100 rounded-xl">
+      <div className="max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-green-400 scrollbar-track-gray-100 rounded-xl">
         <Table>
           <TableHeader className="sticky top-0 bg-gray-50 z-10">
             <TableRow>
-              <TableHead className="font-semibold">Type</TableHead>
               <TableHead className="font-semibold">Amount</TableHead>
               <TableHead className="font-semibold">Status</TableHead>
               <TableHead className="font-semibold">Date</TableHead>
@@ -86,15 +92,12 @@ export default function TransactionsTable() {
           </TableHeader>
 
           <TableBody>
-            {visibleTransactions.length > 0 ? (
-              visibleTransactions.map((tx) => (
+            {visibleDeposits.length > 0 ? (
+              visibleDeposits.map((tx) => (
                 <TableRow
                   key={tx.id}
                   className="hover:bg-gray-50 transition duration-200"
                 >
-                  <TableCell className="font-medium">
-                    {tx.transaction_type}
-                  </TableCell>
                   <TableCell>${tx.amount}</TableCell>
                   <TableCell>
                     <span className={getStatusColor(tx.status)}>
@@ -108,11 +111,8 @@ export default function TransactionsTable() {
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={4}
-                  className="text-center py-6 text-gray-500"
-                >
-                  No transactions found.
+                <TableCell colSpan={3} className="text-center py-6 text-gray-500">
+                  No deposits found.
                 </TableCell>
               </TableRow>
             )}

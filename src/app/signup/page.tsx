@@ -8,17 +8,21 @@ import { useForm } from "react-hook-form";
 import Image from "next/image";
 import Link from "next/link";
 
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import { toast } from "sonner";
 import Navbar from "@/public/Navbar";
 import Footer from "@/public/Footer";
+import { apiUrl } from "../api/route";
 
 const formSchema = z.object({
   firstName: z.string().min(2, "Enter your first name."),
@@ -50,34 +54,55 @@ export default function RegisterPage() {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setLoading(true);
     try {
-      console.log("Registered user:", values);
-      toast.success("Registration successful!");
+      const res = await fetch(`${apiUrl}signup/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstname: values.firstName,
+          lastname: values.lastName,
+          username: values.username,
+          email: values.email,
+          password: values.password,
+          phone: values.phone,
+        }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        // server returned an error payload
+        toast.error(data?.error || "Signup failed");
+        return;
+      }
+
+      // success
+      toast.success(data?.message || "Registration successful!");
       router.push("/login");
     } catch (error) {
-      toast.error("Something went wrong.");
+      console.log("signup error", error);
+      toast.error("Something went wrong. please try again later");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    
-    <section className="min-h-screen bg-white">
-      <Navbar/>
+    <section className="min-h-screen bg-white w-full">
+      <Navbar />
       {/* Header Section */}
       <div className="bg-[#0a0e3f] text-white py-16 text-center mt-10">
         <h1 className="text-3xl font-bold">Register</h1>
         <p className="mt-2 text-sm text-gray-300">
-          Home <span className="mx-1">{`>`}</span> Register
+          <Link href="/">Home</Link> <span className="mx-1">{`>`}</span>{" "}
+          Register
         </p>
       </div>
 
       {/* Main Form Section */}
       <div className="max-w-6xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-10 items-center">
         {/* Illustration */}
-        <div className="flex-col md:flex justify-center gap-2.5 h-50 ">
+        <div className="flex-col hidden md:flex justify-center gap-2.5 h-50 ">
           <Image
-            src="/concept.jpg"
+            src="/signup.jpg"
             alt="Register Illustration"
             width={400}
             height={400}
@@ -93,7 +118,10 @@ export default function RegisterPage() {
             </h2>
 
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-4"
+              >
                 {/* First + Last Name */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <FormField
@@ -179,7 +207,11 @@ export default function RegisterPage() {
                       <FormItem>
                         <Label>Password</Label>
                         <FormControl>
-                          <Input type="password" placeholder="Password" {...field} />
+                          <Input
+                            type="password"
+                            placeholder="Password"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -193,7 +225,11 @@ export default function RegisterPage() {
                       <FormItem>
                         <Label>Confirm Password</Label>
                         <FormControl>
-                          <Input type="password" placeholder="Confirm password" {...field} />
+                          <Input
+                            type="password"
+                            placeholder="Confirm password"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -203,10 +239,17 @@ export default function RegisterPage() {
 
                 {/* Privacy Checkbox */}
                 <div className="flex items-center space-x-2 mt-3">
-                  <input type="checkbox" id="terms" className="border-gray-300" />
+                  <input
+                    type="checkbox"
+                    id="terms"
+                    className="border-gray-300"
+                  />
                   <label htmlFor="terms" className="text-sm text-gray-600">
                     I agree to the{" "}
-                    <Link href="/privacy" className="text-blue-600 hover:underline">
+                    <Link
+                      href="/privacy"
+                      className="text-blue-600 hover:underline"
+                    >
                       Privacy Policy
                     </Link>
                   </label>
@@ -215,7 +258,7 @@ export default function RegisterPage() {
                 {/* Submit Button */}
                 <Button
                   type="submit"
-                  className="w-full mt-4 bg-blue-700 hover:bg-blue-800 text-white"
+                  className="w-full mt-4 bg-blue-700 hover:bg-blue-800 text-white cursor-pointer"
                   disabled={loading}
                 >
                   {loading ? "Creating Account..." : "Register"}
@@ -233,7 +276,7 @@ export default function RegisterPage() {
           </CardContent>
         </Card>
       </div>
-      <Footer/>
+      <Footer />
     </section>
   );
 }

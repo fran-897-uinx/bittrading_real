@@ -11,6 +11,7 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from "@/components/ui/carousel";
+import Link from "next/link";
 
 export default function Hero() {
   const slides = [
@@ -35,35 +36,35 @@ export default function Hero() {
   const [current, setCurrent] = useState(0);
 
   // 🔁 Auto-slide forward & backward
-    useEffect(() => {
-      if (!api) return;
-  
-      let direction: "next" | "prev" = "next";
-      const total = slides.length;
-  
-      const interval = setInterval(() => {
-        const currentIndex = api.selectedScrollSnap();
-  
-        if (direction === "next") {
-          if (currentIndex === total - 1) {
-            direction = "prev";
-            api.scrollPrev();
-          } else {
-            api.scrollNext();
-          }
+  useEffect(() => {
+    if (!api) return;
+
+    let direction: "next" | "prev" = "next";
+    const total = slides.length;
+
+    const interval = setInterval(() => {
+      const currentIndex = api.selectedScrollSnap();
+
+      if (direction === "next") {
+        if (currentIndex === total - 1) {
+          direction = "prev";
+          api.scrollPrev();
         } else {
-          if (currentIndex === 0) {
-            direction = "next";
-            api.scrollNext();
-          } else {
-            api.scrollPrev();
-          }
+          api.scrollNext();
         }
-      }, 4000);
-  
-      return () => clearInterval(interval);
-    }, [api]);
-  
+      } else {
+        if (currentIndex === 0) {
+          direction = "next";
+          api.scrollNext();
+        } else {
+          api.scrollPrev();
+        }
+      }
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [api]);
+
   // Track current slide for dot indicator
   useEffect(() => {
     if (!api) return;
@@ -102,10 +103,10 @@ export default function Hero() {
                     </p>
                     <div className="flex gap-4 justify-center">
                       <button className="bg-blue-600 px-6 py-3 rounded-4xl font-semibold hover:bg-blue-700 cursor-pointer">
-                        Get Started
+                        <Link href="/signup">Get Started</Link>
                       </button>
                       <button className="border border-white px-6 py-3 rounded-4xl font-semibold hover:bg-white hover:text-blue-600 cursor-pointer">
-                        Login
+                        <Link href="/login">Login</Link>
                       </button>
                     </div>
                   </div>
@@ -114,10 +115,6 @@ export default function Hero() {
             </CarouselItem>
           ))}
         </CarouselContent>
-
-        {/* Navigation arrows */}
-        {/* <CarouselPrevious className="left-4 bg-white/20 hover:bg-white/40" />
-        <CarouselNext className="right-4 bg-white/20 hover:bg-white/40" /> */}
 
         {/* Dots navigation (bottom-right corner) */}
         <div className="absolute md:bottom-70 md:right-10 flex gap-2 z-20 md:grid  bottom-10 right-35">
