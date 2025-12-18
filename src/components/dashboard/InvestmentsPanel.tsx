@@ -9,15 +9,45 @@ import { Gem, Coins, BarChart3, Building, Crown } from "lucide-react";
 import InvestModal from "./InvestModal";
 
 const plans = [
-  { id: "silver", name: "Silver", roi: "20% AFTER 2 Days", range: "$100 - $999", icon: <Gem/> },
-  { id: "gold", name: "Gold", roi: "33% AFTER 2 Days", range: "$1000 - $4999", icon: <Coins/> },
-  { id: "forex", name: "Forex", roi: "80% AFTER 4 Days", range: "$5000 - $10000", icon: <BarChart3/> },
-  { id: "company", name: "Company Shares", roi: "120% AFTER 3 Days", range: "$5,000 - $15,000", icon: <Building/> },
-  { id: "realestate", name: "Real Estate", roi: "205% AFTER 7 Days", range: "$10,000 - $50,000", icon: <Crown/> },
+  {
+    id: "silver",
+    name: "Silver",
+    roi: "20% AFTER 2 Days",
+    range: "$100 - $999",
+    icon: <Gem />,
+  },
+  {
+    id: "gold",
+    name: "Gold",
+    roi: "33% AFTER 2 Days",
+    range: "$1000 - $4999",
+    icon: <Coins />,
+  },
+  {
+    id: "forex",
+    name: "Forex",
+    roi: "80% AFTER 4 Days",
+    range: "$5000 - $10000",
+    icon: <BarChart3 />,
+  },
+  {
+    id: "company",
+    name: "Company Shares",
+    roi: "120% AFTER 3 Days",
+    range: "$5,000 - $15,000",
+    icon: <Building />,
+  },
+  {
+    id: "realestate",
+    name: "Real Estate",
+    roi: "205% AFTER 7 Days",
+    range: "$10,000 - $50,000",
+    icon: <Crown />,
+  },
 ];
 
 export default function InvestmentsPanel() {
-  const [selected, setSelected] = useState<typeof plans[0] | null>(null);
+  const [selected, setSelected] = useState<(typeof plans)[0] | null>(null);
 
   return (
     <section>
@@ -27,13 +57,19 @@ export default function InvestmentsPanel() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {plans.map(p => (
-          <motion.div key={p.id} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }}>
+        {plans.map((p) => (
+          <motion.div
+            key={p.id}
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+          >
             <Card className="overflow-hidden">
               <CardContent className="flex flex-col gap-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center">{p.icon}</div>
+                    <div className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center">
+                      {p.icon}
+                    </div>
                     <div>
                       <div className="font-semibold">{p.name}</div>
                       <div className="text-sm text-slate-500">{p.roi}</div>

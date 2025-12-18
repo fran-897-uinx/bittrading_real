@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import InvestModal from "./dashboard/InvestModal";
+import { useState } from "react";
 
 interface InvestmentPlan {
   name: string;
@@ -20,6 +22,8 @@ interface InvestmentCardProps {
 }
 
 export function InvestmentCard({ plan, index }: InvestmentCardProps) {
+  // const [selected, setSelected] = useState<(typeof )[0] | null>(null);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}

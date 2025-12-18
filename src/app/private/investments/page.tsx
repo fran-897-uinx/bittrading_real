@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { InvestmentCard } from "@/components/InvestmentsCards";
 
+
 export default function InvestmentPage() {
   const plans = [
     {

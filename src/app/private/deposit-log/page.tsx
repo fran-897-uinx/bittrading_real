@@ -100,18 +100,21 @@ export default function DepositsTable() {
                 >
                   <TableCell>${tx.amount}</TableCell>
                   <TableCell>
+                    {new Date(tx.created_at).toLocaleString()}
+                  </TableCell>
+                  <TableCell>
                     <span className={getStatusColor(tx.status)}>
                       {tx.status}
                     </span>
-                  </TableCell>
-                  <TableCell>
-                    {new Date(tx.created_at).toLocaleString()}
                   </TableCell>
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={3} className="text-center py-6 text-gray-500">
+                <TableCell
+                  colSpan={3}
+                  className="text-center py-6 text-gray-500"
+                >
                   No deposits found.
                 </TableCell>
               </TableRow>
